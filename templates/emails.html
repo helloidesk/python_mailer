@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Python Flask Send Bulk Emails</title>
+	<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+	<script>tinymce.init({selector:'textarea#email-body'});</script>
+</head>
+<body>
+	<div style="width: 600px; margin: auto;">
+		<div>
+			{% with messages = get_flashed_messages() %}
+			  {% if messages %}
+				<ul style="color: {{ color }};">
+				{% for message in messages %}
+				  <li>{{ message }}</li>
+				{% endfor %}
+				</ul>
+			  {% endif %}
+			{% endwith %}
+		</div>
+
+		<div>
+			<form action="/send" method="post" enctype="multipart/form-data">
+				<h2>Compose and Send Email</h2>
+				<dl>
+					<p>
+						<label><strong>Email Subject</strong></label>
+						<input name="email-subject" value="{{ request.form['email-subject'] }}" type="text" placeholder="Email Subject" size="60"/>
+					</p>
+					<p>
+						<label><strong>Email Body</strong></label>
+						<textarea id="email-body" name="email-body" placeholder="Email Body">{{ request.form['email-body'] }}</textarea>
+					</p>
+					<p>
+						<label><strong>List of Emails</strong>(separated by ,)</label>
+						<textarea name="emails" placeholder="List of Emails" rows="6" cols="60">{{ request.form['emails'] }}</textarea>
+					</p>
+					<p>
+						<label><strong>Email Attachments</strong></label>
+						<input name="email-attachments[]" type="file" multiple="true"/>
+					</p>
+				</dl>
+				<p>
+					<input type="submit" value="Send Email">
+				</p>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
